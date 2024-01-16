@@ -2,8 +2,8 @@ const service = require("../services/authentication")
 
 const login = async (req, res, next) => {
     try {
-        const { accessToken, refreshToken } = await service.login(req.body)
-        res.status(200).send({ message: "login successful", accessToken, refreshToken })
+        const { accessToken } = await service.login(req.body)
+        res.status(200).send({ message: "login successful", accessToken })
     } catch (error) {
         next(error)
     }

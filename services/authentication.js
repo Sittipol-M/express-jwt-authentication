@@ -13,7 +13,7 @@ const login = async (bodyRequest) => {
 }
 
 const generateAccessAndRefreshToken = ({ username, id }) => {
-    const accessToken = generateJwtToken({ username, id, expiresIn: "5m" })
+    const accessToken = generateJwtToken({ username, id, expiresIn: "1d" })
     const refreshToken = generateJwtToken({ username, id, expiresIn: "1d" })
     return { accessToken, refreshToken }
 }
