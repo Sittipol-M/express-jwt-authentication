@@ -47,10 +47,38 @@ const refreshAccessToken = ({ refreshToken }) => {
     return accessToken
 }
 
+const register = async (bodyRequest) => {
+    await validateRegisterBodyRequest(bodyRequest)
+    const nextId = users.mockData.length + 1
+    users.mockData.push({
+        id: nextId,
+        firstName: bodyRequest.firstName,
+        lastName: bodyRequest.lastName,
+        password: bodyRequest.password,
+        username: bodyRequest.username
+    })
+}
 
+const validateRegisterBodyRequest = async (bodyRequest) => {
+    if (!bodyRequest) {
+        throw new ValidationError({ message: "body request is required" })
+    }
+    const schema = Joi.object({
+        firstName: Joi.string().required(),
+        lastName: Joi.string().required(),
+        username: Joi.string().required(),
+        password: Joi.string().required(),
+        confirmPassword: Joi.ref("password")
+    }).with("password", "confirmPassword")
+    try {
+        await schema.validateAsync(bodyRequest)
+    } catch (error) {
+        throw new ValidationError({ message: error?.message })
+    }
+}
 
 const generateJwtToken = ({ username, id, expiresIn }) => {
     return jwt.sign({ username, id }, secretKey, { expiresIn })
 }
 
-module.exports = { login, refreshAccessToken }
+module.exports = { login, refreshAccessToken, register }

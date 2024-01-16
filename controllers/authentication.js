@@ -9,8 +9,9 @@ const login = async (req, res, next) => {
     }
 }
 
-const register = (req, res, next) => {
+const register = async (req, res, next) => {
     try {
+        await service.register(req.body)
         res.status(200).send({ message: "register successful" })
     } catch (error) {
         next(error)
